@@ -7,6 +7,7 @@ setup(
     author_email="ge64vol@mytum.de",
     description="A package for exploring columns of pandas data frames containing raw data.",
     url="https://github.com/marlonnienaber/pandas-explore",
+    license="MIT",
     packages=find_packages(),
     install_requires=[
         "pandas>=2.2.3",
