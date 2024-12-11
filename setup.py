@@ -1,11 +1,16 @@
 from setuptools import setup, find_packages
 
+with open("Readme.md", "r") as f:
+    long_description = f.read()
+
 setup(
     name="pandas_explore",
     version="1.0.0",
     author="Marlon Nienaber",
     author_email="ge64vol@mytum.de",
     description="A package for exploring columns of pandas data frames containing raw data.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/marlonnienaber/pandas-explore",
     license="MIT",
     package_dir={"": "app"},
