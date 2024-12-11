@@ -1,4 +1,4 @@
-from .source import (
+from pandas_explore.src.src import (
     explore_numerical_id,
     explore_string_id,
     explore_boolean_attribute,
