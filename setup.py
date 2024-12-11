@@ -5,13 +5,13 @@ with open("Readme.md", "r") as f:
 
 setup(
     name="pandas_explore",
-    version="1.0.0",
+    version="1.0.1",
     author="Marlon Nienaber",
     author_email="ge64vol@mytum.de",
     description="A package for exploring columns of pandas data frames containing raw data.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/marlonnienaber/pandas-explore",
+    url="https://github.com/marlonnienaber/pandas_explore",
     license="MIT",
     package_dir={"": "app"},
     packages=find_packages(where="app"),

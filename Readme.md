@@ -25,7 +25,7 @@ explore_boolean_attribute(df['some_column_name'])
 To install the package, clone the repository and install the required dependencies:
 
 ```bash
-git clone https://github.com/marlonnienaber/pandas-explore
+git clone https://github.com/marlonnienaber/pandas_explore
 cd pandas-explore
 pip install .
 ```
@@ -33,7 +33,7 @@ pip install .
 Or via pip:
 
 ```bash
-TODO
+pip install -i https://test.pypi.org/simple/ pandas-explore
 ```
 
 
