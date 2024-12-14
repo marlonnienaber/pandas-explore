@@ -103,6 +103,7 @@ def explore_numerical_id(column):
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
     """
 
+    column = column.reset_index(drop=True)
     messages = []
     html_list = []
     if len(column) == 0:
@@ -167,6 +168,7 @@ def explore_string_id(column):
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
     """
 
+    column = column.reset_index(drop=True)
     messages = []
     html_list = []
     
@@ -224,6 +226,7 @@ def explore_boolean_attribute(column):
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
     """
 
+    column = column.reset_index(drop=True)
     messages = []
     html_list = []
     
@@ -279,6 +282,7 @@ def explore_categorical_attribute(column):
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
     """
 
+    column = column.reset_index(drop=True)
     messages = []
     html_list = []
 
@@ -323,7 +327,7 @@ def explore_numerical_attribute(column):
     Parameters:
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
     """
-     
+    column = column.reset_index(drop=True)
     messages = []
     html_list = []
     
