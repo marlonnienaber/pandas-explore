@@ -5,7 +5,7 @@ with open("Readme.md", "r") as f:
 
 setup(
     name="pandas_explore",
-    version="1.0.2",
+    version="1.0.3",
     author="Marlon Nienaber",
     author_email="ge64vol@mytum.de",
     description="A package for exploring columns of pandas data frames containing raw data.",

@@ -412,3 +412,38 @@ def explore_numerical_attribute(column):
             html_list.append(non_number_counts_html)
     
     display_in_grid(messages, html_list)
+
+
+def explore_cleaned_key(key):
+    """
+    Explores the key of a pandas dataframe. Expects a cleaned key (no missing values).
+    
+    Parameters:
+    key: a single or multi-column key (pandas.Series or pandas.DataFrame)
+    """
+    key = key.reset_index(drop=True)
+    messages = []
+    html_list = []
+
+    num_entries = len(key)
+    messages.append(f"rows: {num_entries}")
+
+    contains_duplicates = key.duplicated(keep=False).any()
+
+    if contains_duplicates:
+        duplicates = key[key.duplicated(keep=False)]
+        
+        if isinstance(key, pd.DataFrame):
+            duplicate_counts = duplicates.apply(tuple, axis=1).value_counts(dropna=False)
+        else:
+            duplicate_counts = duplicates.value_counts(dropna=False)
+
+        duplicate_counts_df = pd.DataFrame(duplicate_counts).reset_index()
+        duplicate_counts_df.columns = ['contained duplicates', 'count']
+        duplicate_counts_html = duplicate_counts_df.to_html(index=False)
+
+        html_list.append(duplicate_counts_html)
+    else:
+        messages.append(f"Contains no duplicate keys")
+    
+    display_in_grid(messages, html_list)
