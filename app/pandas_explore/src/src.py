@@ -298,8 +298,8 @@ def explore_boolean_attribute(column):
     if len(column) == 0:
         messages.append("column is empty")
     else:
-        positive_bools = [True, 1, 1.0, "Yes", "yes", "Positive", "positive", "Y", "y", "T", "t"]
-        negative_bools = [False, 0, 0.0, "No", "no", "Negative", "negative", "N", "n", "F", "f", None]
+        positive_bools = [True, 1, 1.0, "Yes", "yes", "Positive", "positive", "Y", "y", "T", "t", "True", "1", "1.0"]
+        negative_bools = [False, 0, 0.0, "No", "no", "Negative", "negative", "N", "n", "F", "f", None, "False", "0", "0.0"]
         bool_values = positive_bools + negative_bools
         
         def is_negative(value):
@@ -308,31 +308,34 @@ def explore_boolean_attribute(column):
         def is_bool(value):
             return value in bool_values
 
-        contains_non_bools = any(column.apply(lambda x: not is_bool(x)))
-        if contains_non_bools:
-            non_bool_entries = column[column.apply(lambda x: not is_bool(x))]
-            non_bool_entries_with_types = non_bool_entries.apply(lambda x: f"{x} ({type(x).__name__})")
-            non_bool_counts = non_bool_entries_with_types.value_counts(dropna=False)
-            non_bool_df = pd.DataFrame(non_bool_counts).reset_index()
-            non_bool_df.columns = ['faulty/unknown entries', 'count']
-            non_bool_html = non_bool_df.to_html(index=False)
-            html_list.append(non_bool_html)
+        if all(column.apply(lambda x: not is_bool(x))):
+            messages.append("column contains no known boolean representations!")
+        else:
+            contains_non_bools = any(column.apply(lambda x: not is_bool(x)))
+            if contains_non_bools:
+                non_bool_entries = column[column.apply(lambda x: not is_bool(x))]
+                non_bool_entries_with_types = non_bool_entries.apply(lambda x: f"{x} ({type(x).__name__})")
+                non_bool_counts = non_bool_entries_with_types.value_counts(dropna=False)
+                non_bool_df = pd.DataFrame(non_bool_counts).reset_index()
+                non_bool_df.columns = ['faulty/unknown entries', 'count']
+                non_bool_html = non_bool_df.to_html(index=False)
+                html_list.append(non_bool_html)
 
-        if not contains_non_bools:
-            messages.append("contains only boolean representations")
-        
-        contained_representations = column[column.apply(lambda x: is_bool(x))]
-        contained_representation_with_types = contained_representations.map(lambda x: f"{x} ({type(x).__name__})") 
-        representations_counts = contained_representation_with_types.value_counts(dropna=False)
-        representations_counts_df = pd.DataFrame(representations_counts).reset_index()
-        representations_counts_df.columns = ['contained booleans representations', 'count']
-        representations_counts_html = representations_counts_df.to_html(index=False)
-        html_list.append(representations_counts_html)
-        
-        contained_bools = contained_representations.apply(lambda x: False if is_negative(x) else True)
-        contained_positives = contained_bools[contained_bools]
-        chart_html = create_bicategorical_pie_chart(len(contained_bools), len(contained_positives), "values repres. False", "values repres. True")
-        html_list.append(chart_html)
+            if not contains_non_bools:
+                messages.append("contains only boolean representations")
+            
+            contained_representations = column[column.apply(lambda x: is_bool(x))]
+            contained_representation_with_types = contained_representations.map(lambda x: f"{x} ({type(x).__name__})") 
+            representations_counts = contained_representation_with_types.value_counts(dropna=False)
+            representations_counts_df = pd.DataFrame(representations_counts).reset_index()
+            representations_counts_df.columns = ['contained booleans representations', 'count']
+            representations_counts_html = representations_counts_df.to_html(index=False)
+            html_list.append(representations_counts_html)
+            
+            contained_bools = contained_representations.apply(lambda x: False if is_negative(x) else True)
+            contained_positives = contained_bools[contained_bools]
+            chart_html = create_bicategorical_pie_chart(len(contained_bools), len(contained_positives), "values repres. False", "values repres. True")
+            html_list.append(chart_html)
     
     display_in_grid(messages, html_list)
 
