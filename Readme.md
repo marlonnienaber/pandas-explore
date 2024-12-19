@@ -1,6 +1,6 @@
 # pandas_explore
 
-**pandas_explore** is a Python package designed for the exploration of columns in pandas DataFrames. It provides utilities to analyze the raw data of numerical, categorical, boolean and ID attributes. Furthermore single and multi-column keys can be analyzed.
+**pandas_explore** is a Python package designed for the exploration of columns in pandas DataFrames. It provides utilities to analyze the raw data of numerical, categorical, boolean, string and ID attributes. Furthermore single and multi-column keys can be analyzed.
 
 
 ## Installation
@@ -29,6 +29,7 @@ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/
 - explore_categorical_attribute
 - explore_boolean_attribute
 - explore_numerical_attribute
+- explore_string_attribute
 - explore_cleaned_key
 
 **example**:

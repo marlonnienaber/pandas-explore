@@ -162,7 +162,7 @@ def explore_string_id(column):
     - displays occuring string lengths
     3) duplicates 
     - displays whether valid entries contain duplicates
-    - if present displays duplicates contained in the valid entries and how often they occur
+    - if present displays duplicates contained in the valid entries
 
     Parameters:
     column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
@@ -198,6 +198,71 @@ def explore_string_id(column):
         if strings_contain_duplicates:
             duplicated_values = string_entries[string_entries.duplicated(keep=False)].unique()
             duplicated_values_df = pd.DataFrame({'entries with duplicates': duplicated_values})
+            duplicated_values_df_html = duplicated_values_df.head(15).to_html(index=False)
+            if len(duplicated_values_df) > 15:
+                truncated_html = "<p style='color: grey;'>(truncated to 15 rows)</p>"
+                combined_html = f"{duplicated_values_df_html}{truncated_html}"
+            else:
+                combined_html = duplicated_values_df_html
+            html_list.append(combined_html)
+            
+        if not strings_contain_duplicates:
+            messages.append("valid entries contain no duplicates")
+        
+    display_in_grid(messages, html_list)
+
+
+def explore_string_attribute(column):
+    """
+    Explores a column of a pandas dataframe containing string entries:
+    1) missing/faulty values
+    - displays whether column contains only entries of type string
+    - if present displays non-string values and how often they occur
+    2) occuring lengths 
+    - displays min/max/median of occurring string lengths
+    3) duplicates 
+    - displays whether valid entries contain duplicates
+    - if present displays duplicates contained in the valid entries and how often they occur
+
+    Parameters:
+    column (pandas.Series): A single column of a pandas dataframe. (e.g. obtained by df['column_name'])
+    """
+
+    column = column.reset_index(drop=True)
+    messages = []
+    html_list = []
+    
+    if len(column) == 0:
+        messages.append("column is empty")
+    else:
+        contains_non_strings = any(column.apply(lambda x: not isinstance(x, str)))
+        if contains_non_strings:
+            non_string_entries = column[column.apply(lambda x: not isinstance(x, str))]
+            non_string_counts = non_string_entries.value_counts(dropna = False)
+            non_string_df = pd.DataFrame(non_string_counts).reset_index()
+            non_string_df.columns = ['contained non-strings', 'count']
+            non_string_html = non_string_df.to_html(index=False)
+            html_list.append(non_string_html)
+            
+        if not contains_non_strings:
+            messages.append("contains only valid strings")
+        
+        string_entries = column[column.apply(lambda x: isinstance(x, str))]
+        string_lengths = string_entries.apply(lambda x: len(str(x))).unique()
+        string_lengths = pd.Series(string_lengths)
+        max_length = string_lengths.max()
+        min_length = string_lengths.min()
+        median_length = string_lengths.median()
+        messages.append(f"max string length: {max_length}")
+        messages.append(f"min string length: {min_length}")
+        messages.append(f"median string length: {median_length}")
+        
+        strings_contain_duplicates = len(string_entries.unique()) != len(string_entries)
+        if strings_contain_duplicates:
+            duplicated_values = string_entries[string_entries.duplicated(keep=False)]
+            duplicated_values_counts = duplicated_values.value_counts(dropna=False)
+            duplicated_values_df = pd.DataFrame(duplicated_values_counts).reset_index()
+            duplicated_values_df.columns = ['duplicate entries', 'count']
             duplicated_values_df_html = duplicated_values_df.head(15).to_html(index=False)
             if len(duplicated_values_df) > 15:
                 truncated_html = "<p style='color: grey;'>(truncated to 15 rows)</p>"
